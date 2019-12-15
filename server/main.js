@@ -1,9 +1,17 @@
+require('dotenv').config();
 const fs = require('fs');
 const request= require('request');
 const morgan = require('morgan');
 const cors = require('cors');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
+
+const nodemailer = require('nodemailer');
+const { google } = require("googleapis");
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const cookieParser = require('cookie-parser');
+const cookieSession = require('cookie-session');
+
 const express = require('express');
 const path = require('path');
 const db = require('./dbutil');
@@ -17,14 +25,14 @@ if (fs.existsSync(CONFIGFILE)) {
 		ca: fs.readFileSync(config.mysql.cacert)
     }
 } else {
-	console.log("config.js does not exist so environment variables");
+	console.log("config.js does not exist so use environment variables");
 	config = {
 		mysql: {
 			host: process.env.DB_HOST, //these are the heroku config variables
 			port: process.env.DB_PORT,
 			user: process.env.DB_USER,
 			password: process.env.DB_PASSWORD,
-			database: DB_DATABASE,
+			database: process.env.DB_DATABASE,
 			connectionLimit: 4,
 			ssl: {
 				ca: process.env.DB_CA
@@ -37,9 +45,19 @@ if (fs.existsSync(CONFIGFILE)) {
 		mongodb: {
 			url: process.env.MONGO_URL
 		},
-		tokenSecret: process.env.TOKEN_SECRET
+		tokenSecret: process.env.TOKEN_SECRET,
+		edamam_api: {
+			appId: process.env.EDAMAM_API_ID, 
+			appKey: process.env.EDAMAM_API_KEY
+		},
+		google_auth: {
+			clientID: process.env.GOOGLE_CLIENT_ID,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+			callbackURL: process.env.GOOGLE_CALLBACK_URL
+		}
 	};
 }
+//console.log("config=", config);
 
 const fileUpload = multer({ dest: __dirname + '/tmp' });
 const { loadConfig, testConnections } = require('./initdb');
@@ -51,18 +69,21 @@ const pool = conns.mysql;
 const FIND_USER = 'select count(*) as user_count from user where username = ? and password = sha1(?)';
 const findUser = db.mkQueryFromPool(db.mkQuery(FIND_USER), pool);
 
-const authenticateUser = (param) => {
-    return (
-        findUser(param)
-            .then(result => (result.length && result[0].user_count > 0)) //returns true or false
-    )
-};
+// AUTHENTICATION
 const GET_USER_DETAILS = 'select userid, username from user where username = ?';
 const getUserDetails = db.mkQueryFromPool(db.mkQuery(GET_USER_DETAILS), pool);
 
 const GET_USERNAME = 'select username from user where userid = ?';
 const getUsername = db.mkQueryFromPool(db.mkQuery(GET_USERNAME), pool);
 
+const authenticateUser = (param) => {
+    return (
+        findUser(param)
+            .then(result => (result.length && result[0].user_count > 0)) //returns true or false
+    )
+};
+
+// INSERT AND GET RECIPE DATA
 const INSERT_RECIPE = 'insert into recipe (userid, recipename, preptime, cooktime, recipedescription, serving, submitted, image_url) values (?, ?, ?, ?, ?, ?, ?, ?)';
 const insertRecipe = db.mkQuery(INSERT_RECIPE, pool);
 
@@ -97,11 +118,13 @@ const getInstruction = db.mkQueryFromPool(db.mkQuery(GET_INSTRUCTION), pool);
 const GET_REVIEW = 'select r.rating, r.comments, u.username from review r left join user u on u.userid = r.userid where recipeid = ?';
 const getReview = db.mkQueryFromPool(db.mkQuery(GET_REVIEW), pool);
 
+const GET_ALL_RECIPEID = 'select recipeid from recipe';
+const getAllRecipeId = db.mkQueryFromPool(db.mkQuery(GET_ALL_RECIPEID), pool);
+
 const UPDATE_IMAGE_URL_RECIPE = 'update recipe set image_url = ? where recipeid = ?';
 const updateImageUrlRecipe = db.mkQuery(UPDATE_IMAGE_URL_RECIPE, pool);
 
-const GET_ALL_RECIPEID = 'select recipeid from recipe';
-const getAllRecipeId = db.mkQueryFromPool(db.mkQuery(GET_ALL_RECIPEID), pool);
+// REVIEW FUNCTION QUERIES
 
 const GET_REVIEW_BY_USER = 'select r.recipeid, r.reviewid, rec.recipename, r.rating, r.comments from review r left join recipe rec on rec.recipeid = r.recipeid where r.userid = ?';
 const getReviewByUser = db.mkQueryFromPool(db.mkQuery(GET_REVIEW_BY_USER), pool);
@@ -114,6 +137,8 @@ const updateReview = db.mkQueryFromPool(db.mkQuery(UPDATE_REVIEW), pool);
 
 const DELETE_REVIEW = 'delete from review where reviewid = ?';
 const deleteReview = db.mkQueryFromPool(db.mkQuery(DELETE_REVIEW), pool);
+
+// SEARCH QUERIES
 
 const SEARCH_RECIPE_BY_NAME = 'select * from recipe where recipeid in (select distinct(recipeid) from recipe where recipename like ?);';
 const searchRecipeByName = db.mkQueryFromPool(db.mkQuery(SEARCH_RECIPE_BY_NAME), pool);
@@ -128,7 +153,7 @@ const searchRecipeByCategory = db.mkQueryFromPool(db.mkQuery(SEARCH_RECIPE_BY_CA
 const passport= require('passport');
 const LocalStrategy= require('passport-local').Strategy;
 
-// you can do passport.use for many strategies
+// you can do passport.use for local strategy
 passport.use(new LocalStrategy(
     {
     usernameField: 'username',
@@ -153,45 +178,39 @@ passport.use(new LocalStrategy(
     })
 );
 
-// // serialize user
-// passport.serializeUser(
-//     (user, done) =>{
-//         console.log('**Serialize user: ', user);
-//         done(null, user);
-//     }
-// );
+// passport.use for googlestrategy
+passport.use(new GoogleStrategy({
+	clientID: config.google_auth.clientID,
+	clientSecret: config.google_auth.clientSecret,
+	callbackURL: config.google_auth.callbackURL
+},
+(token, refreshToken, profile, done) => {
+	console.log("profile=", profile);
+	console.log("token=", token);
 
-// // deserialize user
-// // retrieve the user profile from the database and pass it to passport
-// // passport will attach the user details to req.user (if it has req.user, means it is authenticated.)
-// passport.deserializeUser(
-//     (user, done) =>{
-//         console.log('**Deserialize user: ', user);
-//         getUserDetails([user])
-//         .then(result=>{
-//             console.log('>>> result from deserialize: ', {...result[0]});
-//             if (result.length){
-//                 return done(null, {...result[0]}); //turn it into a regular json object (if you don't want row data packet)
-//             }
-//             done(null, user);
-//         })
-//     }
-// );
+	return done(null, {
+		profile: profile,
+		token: token //returns a token. store this into database
+	});
+}));
+
 const app = express();
 
 const angularDistPath = path.join(__dirname+ '/public', 'client');
-console.log(angularDistPath);
 app.use(express.static(angularDistPath));
 
-// Config cors, morgan
+// oauth 
+app.use(cookieParser());
 app.use(cors());
 app.use(morgan('tiny'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.use(passport.initialize());
+app.use(passport.session());
 
-// Routes
 
+// routes
 app.post(
     '/api/login', 
     passport.authenticate('local', {
@@ -395,7 +414,7 @@ app.post('/api/recipe', fileUpload.single('recipeImage'),
 	}
 );
 
-//search recipes from searchterm and filter
+// search recipes from searchterm and filter
 app.post('/api/recipes', (req, resp) =>{
 	const searchterm = req.body.searchterm;
 	const filter = req.body.filter;
@@ -429,6 +448,7 @@ app.post('/api/recipes', (req, resp) =>{
 	}	
 })
 
+// insert image into s3
 app.post('/api/recipeimg', fileUpload.single('myImage'),
     (req, resp) => {
 		console.info('file upload body: ', req.body);
@@ -507,7 +527,8 @@ app.post('/api/recipeimg', fileUpload.single('myImage'),
 	}
 );
 
-//needs to be before /api/recipe/:recipeid endpoint
+// get random recipe
+// needs to be before /api/recipe/:recipeid endpoint
 app.get('/api/recipe/random',
 	(req, resp) => {
 		getAllRecipeId()
@@ -536,7 +557,6 @@ app.get('/api/recipe/:recipeid', (req, resp) => {
 	})
 	.then(results => {
 		//results is an array of 5 promises.
-		//results[0] contains the result for getRecipe, results[1] contains the result for getCategory, etc
 		const r0 = results[0];
 		const r1 = results[1];
 		const r2 = results[2];
@@ -561,6 +581,14 @@ app.get('/api/recipe/:recipeid', (req, resp) => {
 			reviewArr.push({...r4[i]});
 		};
 
+		let origIngName = ingArr[0].ingredientname;
+		let finalIngName = origIngName.substring(origIngName.lastIndexOf(" ") + 1);
+		let api_url = `https://api.edamam.com/api/nutrition-data?app_id=${config.edamam_api.appId}&app_key=${config.edamam_api.appKey}&ingr=${ingArr[0].amount}%20${ingArr[0].unit}%20${finalIngName}`;
+
+		request.get(api_url, (err, resp, body) => {
+			console.log(JSON.parse(body).calories);
+		});
+
 		processed = {
 			recipeName: r0[0].recipename,
 			prepTime: r0[0].preptime,
@@ -577,6 +605,7 @@ app.get('/api/recipe/:recipeid', (req, resp) => {
 			reviews: reviewArr,
 			averageRating: r0[0].averageRating
 		};
+		// console.log("processed", processed);
 
 		getUsername([userid])
 		.then(result=>{
@@ -593,7 +622,7 @@ app.get('/api/recipe/:recipeid', (req, resp) => {
 });
 
 // REVIEWS RELATED
-
+// insert review
 app.post(
     '/api/review', express.urlencoded({extended:true}),
 	(req, resp, next) => {
@@ -648,6 +677,7 @@ app.post(
 	}
 );
 
+// get all reviews of 1 user
 app.get('/api/user/review',
 	(req, resp, next) => {
 		const authorization = req.get('Authorization');
@@ -695,6 +725,7 @@ app.get('/api/user/review',
 	}
 );
 
+// get review by id
 app.get('/api/user/review/:reviewid',
 	(req, resp) => {
 		const reviewid = parseInt(req.params.reviewid,10);
@@ -708,6 +739,7 @@ app.get('/api/user/review/:reviewid',
 	}
 );
 
+// update review
 app.put('/api/user/review/:reviewid',
 	(req, resp) => {
 		const reviewid = req.body.reviewData.updates[0].value;
@@ -728,6 +760,7 @@ app.put('/api/user/review/:reviewid',
 	}
 );
 
+// delete review
 app.delete('/api/user/review/:reviewid',
 	(req, resp) => {
 		const reviewid = req.params.reviewid;
@@ -740,6 +773,60 @@ app.delete('/api/user/review/:reviewid',
 		})
 	}
 );
+
+// OAUTH
+// the idea is to authenticate with google, then generate a authentication token. 
+// then, user can save a recipe when gmail sends them an email with all recipe details (gmail will insert an email into their inbox)
+// this section is only halfway done. can only generate the token
+
+//authenticate google login
+app.get('/auth/google', passport.authenticate('google', 
+	{
+		scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/gmail.insert']
+	}
+));
+
+// after logging in, will go here
+app.get('/auth/google/callback',
+    passport.authenticate('google', {
+        failureRedirect: '/'
+    }),
+    (req, res) => {
+		console.info('user: ', req.user);
+		console.log(req.user.token);
+		console.log("successful login");
+        req.session.token = req.user.token;
+        res.redirect('/');
+    }
+);
+
+// save recipe to inbox
+app.get('/save/recipe', (req, resp) => {
+	// const token = req.session.token;
+	// console.info('token: ', token);
+	// call insertMessage here
+});
+
+/**
+ * Insert Message into user's mailbox.
+ *
+ * @param  {String} userId User's email address. The special value 'me'
+ * can be used to indicate the authenticated user.
+ * @param  {String} email RFC 5322 formatted String.
+ * @param  {Function} callback Function to call when the request is complete.
+ */
+function insertMessage(userId, email, callback) {
+	// Using the js-base64 library for encoding:
+	// https://www.npmjs.com/package/js-base64
+	var base64EncodedEmail = Base64.encodeURI(email);
+	var request = gapi.client.gmail.users.messages.insert({
+	  'userId': userId,
+	  'resource': {
+		'raw': base64EncodedEmail
+	  }
+	});
+	request.execute(callback);
+}
 
 app.use(express.static(__dirname+ '/public'));
 

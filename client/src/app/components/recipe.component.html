@@ -104,6 +104,8 @@
                 <button mat-raised-button color="primary" class="btn btn-lg btn-primary btn-block" type="submit">Submit Review</button>
             </form>
             <hr>
+            <a href="/auth/google">Google Login</a><br>
+            <a href="/save/recipe">Save recipe to Gmail</a>
             <p *ngIf="recipe.submitted" class="card-text text-info text-muted">Last updated on {{recipe.submitted}} by {{recipe.username}}</p>
         </div>
     </div>

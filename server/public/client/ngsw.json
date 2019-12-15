@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1576374855274,
+  "timestamp": 1576421059729,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -10,8 +10,8 @@
       "urls": [
         "/favicon.ico",
         "/index.html",
-        "/main-es2015.541201faaf790e946d2f.js",
-        "/main-es5.541201faaf790e946d2f.js",
+        "/main-es2015.90787d7fa2c5aef95f73.js",
+        "/main-es5.90787d7fa2c5aef95f73.js",
         "/manifest.webmanifest",
         "/polyfills-es2015.2987770fde9daa1d8a2e.js",
         "/polyfills-es5.6696c533341b95a3d617.js",
@@ -90,9 +90,9 @@
     "/assets/img/mainIcon.png": "631fe935ce66d56285e696cc868365c1afe4f398",
     "/assets/img/pizza.jpg": "b4c4252c285af105a95df0ff89474e71441a97e1",
     "/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/index.html": "7d9be317270136e1df4b4153a77725c75f9843d8",
-    "/main-es2015.541201faaf790e946d2f.js": "e288a21b33d5a22c639679e173b4849927c44942",
-    "/main-es5.541201faaf790e946d2f.js": "4b0c7273a1a313cbbc961f8cbb90b6f3473d37b7",
+    "/index.html": "bad81cddfcfc95b5827190fa213d43816f667cd2",
+    "/main-es2015.90787d7fa2c5aef95f73.js": "84b87c6a3732ca533367426eb134c768c615f980",
+    "/main-es5.90787d7fa2c5aef95f73.js": "d11d8eb39a4523d9be979f096fdb34642a10f1c0",
     "/manifest.webmanifest": "76778264ef7b95a6785f0150ccae0e480755e3c1",
     "/polyfills-es2015.2987770fde9daa1d8a2e.js": "cf5cbfa9134716054fb479ab21362146cdf1f2ff",
     "/polyfills-es5.6696c533341b95a3d617.js": "9ceb13edd4b10268f661814868dadb2b284f9745",

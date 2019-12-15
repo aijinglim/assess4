@@ -140,4 +140,12 @@ export class RecipeService {
     );
   }
 
+  // oauth
+  authenticateGoogle(){
+    console.log("this happens");
+    return(
+      this.http.get<any>('/auth/google')
+    );
+  }
+
 }

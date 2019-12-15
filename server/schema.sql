@@ -109,7 +109,9 @@ create index idx_ingredientname on ingredient(ingredientname);
 create index idx_category on category(category);
 
 -- AGGREGATION: AVERAGE RATING FOR RECIPE AND TOTAL TIME NEEDED (preptime + cooktime) FOR RECIPE
--- also see server/data.sql for database inserts 
+-- also see server/data.sql for database inserts.
+-- how the insert queries were created: scraped from tasty.com. used their api call which returns JSON.
+-- processed the json according to what mysql schema needed and converted all into insert queries
 
 -- MONGODB used to insert tokens
 -- INDEXING & EXPIRY IN MONGO:
