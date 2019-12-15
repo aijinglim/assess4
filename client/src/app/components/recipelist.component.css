@@ -1,0 +1,13 @@
+.margin{
+    margin: auto;
+    padding: 50px;
+}
+
+img{
+    border-radius: 50%;
+}
+
+.recipeImg{
+    width: 100px; 
+    height: 100px;
+}

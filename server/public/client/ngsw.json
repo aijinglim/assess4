@@ -1,0 +1,122 @@
+{
+  "configVersion": 1,
+  "timestamp": 1576373865074,
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "urls": [
+        "/favicon.ico",
+        "/index.html",
+        "/main-es2015.541201faaf790e946d2f.js",
+        "/main-es5.541201faaf790e946d2f.js",
+        "/manifest.webmanifest",
+        "/polyfills-es2015.2987770fde9daa1d8a2e.js",
+        "/polyfills-es5.6696c533341b95a3d617.js",
+        "/runtime-es2015.edb2fcf2778e7bf1d426.js",
+        "/runtime-es5.edb2fcf2778e7bf1d426.js",
+        "/scripts.f49567c170bf8a5642de.js",
+        "/styles.f0b5a21691f0b8e6116c.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "urls": [
+        "/assets/icons/icon-128x128.png",
+        "/assets/icons/icon-144x144.png",
+        "/assets/icons/icon-152x152.png",
+        "/assets/icons/icon-192x192.png",
+        "/assets/icons/icon-384x384.png",
+        "/assets/icons/icon-512x512.png",
+        "/assets/icons/icon-72x72.png",
+        "/assets/icons/icon-96x96.png",
+        "/assets/img/carousel1.jpg",
+        "/assets/img/carousel2.jpg",
+        "/assets/img/carousel3.jpg",
+        "/assets/img/chefIcon.png",
+        "/assets/img/drink.jpg",
+        "/assets/img/editIcon.png",
+        "/assets/img/editIcon2.png",
+        "/assets/img/editIcon3.png",
+        "/assets/img/feature1.jpg",
+        "/assets/img/feature2.jpg",
+        "/assets/img/feature3.jpg",
+        "/assets/img/fries.jpg",
+        "/assets/img/hamburger.jpg",
+        "/assets/img/hotdog.jpg",
+        "/assets/img/hungryIcon.png",
+        "/assets/img/hungryIcon2.png",
+        "/assets/img/loginIcon.png",
+        "/assets/img/loginIcon2.png",
+        "/assets/img/mainIcon.png",
+        "/assets/img/pizza.jpg"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/assets/icons/icon-128x128.png": "317070110e06e533cd6f8d80c35ef75a1b1fde6b",
+    "/assets/icons/icon-144x144.png": "cab9fcdbf3aed68f8938dfc2a8132fb55ed527e6",
+    "/assets/icons/icon-152x152.png": "172f6e242b5e9575c3762a25d25753a438dc48a0",
+    "/assets/icons/icon-192x192.png": "396aa0463f22d0b5ceeeb0c0d0fbfd9ce45c6c65",
+    "/assets/icons/icon-384x384.png": "c4787933825ecb538f3dbca3eb0c9e42ae5f8e9a",
+    "/assets/icons/icon-512x512.png": "1d80dcb567bff4e14de59e014e2525fe04879154",
+    "/assets/icons/icon-72x72.png": "1057e0d01320c297d464b0c8c01967a4507c90dc",
+    "/assets/icons/icon-96x96.png": "e1b2a867436b808d125c85e7dafe51850402ad47",
+    "/assets/img/carousel1.jpg": "4185b1ce9ed503c8ae3d2d61c77b35d24b47c020",
+    "/assets/img/carousel2.jpg": "fa2573cc05aa04d50f592757be5573c6202fa0ca",
+    "/assets/img/carousel3.jpg": "daa234fbc0e01e3d668c3e85f8beaf76ea73d379",
+    "/assets/img/chefIcon.png": "10f6e9295dfcf9db113d539fecfadca17b10970c",
+    "/assets/img/drink.jpg": "e709194cfca1dea4d2298ca0a3a589ac2964cec1",
+    "/assets/img/editIcon.png": "8cf763ba82e1926eba4636f627e919b8550a7e87",
+    "/assets/img/editIcon2.png": "fd1ea74b6baae025bae703a48d361b7091b691ab",
+    "/assets/img/editIcon3.png": "75dc243d753ec4ed8ed394757c63071fed6bc9ba",
+    "/assets/img/feature1.jpg": "77a9ab27fed5b9906087e4634ce3a66743fd6787",
+    "/assets/img/feature2.jpg": "026e5456b16f0545694e37c9c78875ffc0423db7",
+    "/assets/img/feature3.jpg": "d861077e4ecadc7a54f1df9a0671e06281f3483a",
+    "/assets/img/fries.jpg": "fc1302ac6cbdaa51c7428577a2591618e54e1475",
+    "/assets/img/hamburger.jpg": "a8248908a2c5481f2cbed9a17bd7f589e38d0deb",
+    "/assets/img/hotdog.jpg": "3d3994cbbe3009d1fc754626e2936530cc054d17",
+    "/assets/img/hungryIcon.png": "f9c4e72dd08fcad469e7e12762373e13d83a3f1c",
+    "/assets/img/hungryIcon2.png": "3bfb5df4911f1ef87bb9bbd3fb45704c66046788",
+    "/assets/img/loginIcon.png": "437b8b5712c52a1367702df762dab016b86c0c4b",
+    "/assets/img/loginIcon2.png": "f8f4062a2eaa06961d361a82570d9fb850b82311",
+    "/assets/img/mainIcon.png": "631fe935ce66d56285e696cc868365c1afe4f398",
+    "/assets/img/pizza.jpg": "b4c4252c285af105a95df0ff89474e71441a97e1",
+    "/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
+    "/index.html": "7d9be317270136e1df4b4153a77725c75f9843d8",
+    "/main-es2015.541201faaf790e946d2f.js": "e288a21b33d5a22c639679e173b4849927c44942",
+    "/main-es5.541201faaf790e946d2f.js": "4b0c7273a1a313cbbc961f8cbb90b6f3473d37b7",
+    "/manifest.webmanifest": "76778264ef7b95a6785f0150ccae0e480755e3c1",
+    "/polyfills-es2015.2987770fde9daa1d8a2e.js": "cf5cbfa9134716054fb479ab21362146cdf1f2ff",
+    "/polyfills-es5.6696c533341b95a3d617.js": "9ceb13edd4b10268f661814868dadb2b284f9745",
+    "/runtime-es2015.edb2fcf2778e7bf1d426.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
+    "/runtime-es5.edb2fcf2778e7bf1d426.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
+    "/scripts.f49567c170bf8a5642de.js": "8ad7702a20c43db91caa733f7a33f7bec58e1cc0",
+    "/styles.f0b5a21691f0b8e6116c.css": "aa2c10121e23f439388791bd503ffc74253bad40"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    }
+  ]
+}

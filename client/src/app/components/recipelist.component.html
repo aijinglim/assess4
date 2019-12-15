@@ -1,0 +1,36 @@
+<div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <div class="text-center mb-4">
+                <img class="mb-4" src="../../assets/img/drink.jpg" alt="" width="150" height="150">
+                <h1 class="h3 mb-3 font-weight-normal">Recipe List</h1>
+                    <p><a>Looking for a recipe? Look no further!</a></p>
+                <hr>
+                <h5 *ngIf= "recipes && recipes.length<=0" class="margin">There are no recipes matching your search</h5>
+            </div>
+        </div>
+    </div>
+    
+    <div class="margin">
+    <table *ngIf= "recipes && recipes.length>0" class="table">
+        <thead>
+            <tr>
+                <th scope="col">Recipe ID</th>
+                <th scope="col">Recipe Name</th>
+                <th scope="col">Image</th>
+                <th scope="col">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let recipe of recipes; let i=index;">
+                <th scope="row">{{recipe.recipeid}}</th>
+                <td><button type="button" class="btn btn-info" (click)="viewRecipe(recipe.recipeid)">{{recipe.recipename}}</button></td>
+                <td><img class="card-img-top recipeImg" src="{{recipe.image_url}}" alt="Recipe image"></td>
+                <td>
+                    <span *ngIf="recipe.recipedescription">{{recipe.recipedescription}}</span>
+                    <span *ngIf="!recipe.recipedescription">None</span>
+                </td>
+            </tr>
+        </tbody>
+    
+    </table>
+    </div>

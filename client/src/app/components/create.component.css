@@ -1,0 +1,19 @@
+.container {
+    width: 100%;
+    max-width: 80%;
+    padding: 15px;
+    margin: 80px auto;
+}
+
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+
+form {
+    display: block;
+    margin-top: 0em;
+}
+
+img{
+    border-radius: 50%;
+}

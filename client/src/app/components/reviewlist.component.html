@@ -1,0 +1,37 @@
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <div class="text-center mb-4">
+            <img class="mb-4" src="../../assets/img/hamburger.jpg" alt="" width="150" height="150">
+            <h1 class="h3 mb-3 font-weight-normal">Reviews List</h1>
+                <p><a>View, edit & delete all reviews you have written!</a></p>
+            <hr>
+            <h5 *ngIf= "reviews && reviews.length<=0" class="margin">You have not reviewed any recipes</h5>
+        </div>
+    </div>
+</div>
+
+<div class="margin">
+<table *ngIf= "reviews && reviews.length>0" class="table">
+    <thead>
+        <tr>
+            <th scope="col">Recipe ID</th>
+            <th scope="col">Recipe Name</th>
+            <th scope="col">Rating</th>
+            <th scope="col">Comments</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let review of reviews; let i=index;">
+            <th scope="row">{{review.recipeid}}</th>
+            <td><button type="button" class="btn btn-info" (click)="viewRecipe(review.recipeid)">{{review.recipename}}</button></td>
+            <td>{{review.rating}}/10</td>
+            <td>{{review.comments}}</td>
+            <td><button type = "button" class="btn btn-warning" (click)="editReview(review.reviewid)">Edit</button></td>
+            <td><button type = "button" class="btn btn-danger" (click)="deleteReview(review.reviewid)">X</button></td>
+        </tr>
+    </tbody>
+
+</table>
+</div>

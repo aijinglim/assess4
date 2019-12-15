@@ -1,0 +1,30 @@
+<form ngNativeValidate #form="ngForm" (ngSubmit)="login(form)" class="form-signin">
+    <div class="text-center mb-4">
+        <img class="mb-4" src="../../assets/img/loginIcon2.png" alt="" width="150" height="150">
+        <h1 class="h3 mb-3 font-weight-normal">Food Finder</h1>
+        <p><a>Share your recipes with the Food Finder community now!</a></p>
+    </div>
+
+    <div class="form-label-group">
+        <input type="text" id="username" name="username" class="form-control" placeholder="Username" ngModel required>
+    </div>
+    <br>
+    <div class="form-label-group">
+        <input type="password" id="password" name="password" class="form-control" placeholder="Password" ngModel required>
+    </div>
+    <br>
+
+    <!-- <div class="checkbox mb-3">
+        <label>
+        <input type="checkbox" value="remember-me"> Remember me
+        </label>
+    </div> -->
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    <div class="margin" *ngIf="showAlert">
+        <div class="alert alert-danger" role="alert">
+            Login credentials are invalid. Please try again.
+        </div>
+    </div>
+    
+</form>
+

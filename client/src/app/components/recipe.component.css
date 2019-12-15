@@ -1,0 +1,49 @@
+.margin {
+    margin: auto;
+    padding: 50px;
+    max-width: 80%
+}
+
+.big{
+    font-size: 40px;
+}
+
+h6{
+    font-size: 25px;
+}
+
+h5{
+    font-size: 35px;
+}
+
+p{
+    font-size: 20px;
+}
+
+th{
+    font-size: 25px;
+}
+
+tbody, tr, td{
+    font-size: 20px;
+}
+
+ul, ol{
+    font-size: 20px;
+}
+
+.form-nice {
+    max-width: 80%;
+    padding: 15px;
+    margin: auto;
+}
+
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+
+form {
+    display: block;
+    margin-top: 0em;
+    border: 1px solid black;
+}

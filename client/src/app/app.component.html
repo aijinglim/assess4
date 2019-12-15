@@ -1,0 +1,52 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+  <a class="navbar-brand mb-1 navbar-text-brand" href="">
+    <img src="../assets/img/mainIcon.png" width="50" height="50" class="d-inline-block align-center" alt="donut">
+    Food Finder
+  </a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link navbar-text" [routerLink]="['/home']">Home <span class="sr-only">(current)</span></a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link navbar-text" [routerLink]="['/create']">Create a recipe</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link navbar-text" [routerLink]="['/reviewlist']">My Reviews</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link navbar-text" (click)="navigateToRandomRecipe()">Random</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <button *ngIf=" router.url == '/' && showLoginButton" class="btn btn-outline-info my-2 my-sm-0 btn-lg" type="submit" (click)="navigateToLogin()">Sign In</button>
+    </form>
+  </div>
+</nav>
+
+<form ngNativeValidate #form="ngForm" (ngSubmit)="search(form)">
+  <div *ngIf=" router.url != '/login'" class="margin">
+    <div class="input-group">
+      <input ngModel type="text" name="searchbar" id="searchbar" class="form-control" aria-label="Text input with segmented dropdown button" placeholder="Search recipes by name, ingredient or keyword" required>
+      <div class="input-group-append">
+        <button type="button" type="submit" class="btn btn-outline-primary">Search</button>
+        <span class="input-group-append">
+          <select ngModel name="filterBy" class="custom-select" id="filterBy" required>
+            <option selected value="" disabled >Search by...</option>
+            <option value="name">Name</option>
+            <option value="ingredient">Ingredient</option>
+            <option value="keyword">Keyword</option>
+          </select>
+        </span>
+      </div>
+    </div>
+  </div>
+</form>
+
+<router-outlet></router-outlet>

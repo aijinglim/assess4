@@ -1,0 +1,111 @@
+
+<div class="margin">
+    <div class="card border-info mb-3">
+        <div class="card-header big">Recipe Details</div>
+        <img class="card-img-top" src="{{recipe.image_url}}" alt="Recipe image">
+        <div class="card-body text-info">
+            <h5 class="card-title">{{recipe.recipeName}}</h5>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Preparation Time</th>
+                        <th scope="col">Cooking Time</th>
+                        <th scope="col">Total Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{recipe.prepTime}}</td>
+                        <td>{{recipe.cookTime}}</td>
+                        <td>{{recipe.totalTime}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h6>Description</h6>
+            <p *ngIf="!recipe.description" class="card-text text-info text-muted">None</p>
+            <p *ngIf="recipe.description" class="card-text text-info">{{recipe.description}}</p>
+            <br>
+
+            <h6>Categories</h6>
+            <ul *ngIf="recipe.category.length>0">
+                <li *ngFor="let category of recipe.category">
+                    {{ category }}
+                </li>
+            </ul>
+            <p *ngIf="recipe.category.length<=0" class="card-text text-info text-muted">None</p>
+
+            <h6>Serving</h6>
+            <!-- <p class="card-text text-info">{{recipe.serving}}</p> -->
+            <p class="card-text text-info text-muted">Adjustable according to your needs!</p>
+            <input type="number" id="serving" name="serving" class="form-control" min=1 step=1 [(ngModel)]="recipe.serving" (change)="adjustServing($event)">
+            <br>   
+
+            <h6>Ingredients</h6>
+            
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Unit</th>
+                        <th scope="col">Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let ingred of recipe.ingredients">
+                        <td>
+                            <input type="text" id="dyanmicAmt" name="dyanmicAmt" class="form-control" placeholder="{{ingred.amount}}" disabled>
+                        </td>
+                        <td>{{ingred.unit}}</td>
+                        <td>{{ingred.ingredientname}}</td>
+                    </tr>
+                </tbody>
+            </table>
+    
+            <h6>Instructions</h6>
+            <ol>
+                <li *ngFor="let ins of recipe.instructions">
+                    {{ ins }}
+                </li>
+            </ol>
+            <hr>
+
+            <h6> Average Rating:</h6>
+            <p *ngIf="!recipe.averageRating" class="card-text text-info text-muted">None</p>
+            <p *ngIf="recipe.averageRating" class="card-text text-info">{{recipe.averageRating}}/10</p>
+
+            <h6>Reviews</h6>
+            <div *ngIf="recipe.reviews.length>0">
+                <div *ngFor="let review of recipe.reviews" class="card">
+                    <div class="card-body ">
+                        <p>Reviewer: <i class="card-text">{{review.username}}</i></p>
+                        <p>Rating: <i class="card-text">{{review.rating}}/10</i></p>
+                        <i class="card-text">"{{review.comments}}"</i>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="recipe.reviews.length<=0">
+                <p *ngIf="recipe.description" class="card-text text-info text-muted">There are no reviews</p>
+            </div>
+            <br>
+            <button type="button" class="btn btn-success btn-sm"(click)="addReview()">Add Review</button>
+            <br><br>
+            <form *ngIf="showReviewForm" ngNativeValidate #reviewForm="ngForm" (ngSubmit)="submit(reviewForm)" class="form-nice">
+                
+                <label for="rating"><h6>Rating*</h6></label>
+                <div class="form-label-group">
+                    <input type="number" id="rating" name="rating" class="form-control" placeholder="Enter the rating" min=0 max=10 step=0.1 ngModel required>
+                </div>
+                <br>
+                <label for="comments"><h6>Comments*</h6></label>
+                <div class="form-label-group">
+                    <textarea class="form-control" name="comments" id="comments" rows="3" placeholder="Enter the comments" ngModel required></textarea>
+                </div>
+                <br>
+                <button mat-raised-button color="primary" class="btn btn-lg btn-primary btn-block" type="submit">Submit Review</button>
+            </form>
+            <hr>
+            <p *ngIf="recipe.submitted" class="card-text text-info text-muted">Last updated on {{recipe.submitted}} by {{recipe.username}}</p>
+        </div>
+    </div>
+</div>
+

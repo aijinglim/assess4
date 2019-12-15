@@ -1,0 +1,200 @@
+<div class="container" >
+<form [formGroup]="addRecipeForm" class="form-nice">
+
+    <div class="text-center mb-4">
+        <img class="mb-4" src="../../assets/img/hotdog.jpg" alt="" width="150" height="150">
+        <h1 class="h3 mb-3 font-weight-normal">Create a recipe!</h1>
+        <p><a>Share what's cooking in your personal kitchen!</a></p>
+    </div>
+
+    <div class="form-label-group">
+        <label for="recipeName"><h5>Recipe Name*</h5></label>
+        <input type="text" id="recipeName" name="recipeName" class="form-control" placeholder="Enter the recipe name" formControlName="recipeName">
+    </div>
+    <br>
+
+    <div *ngIf="f.controls.recipeName.errors!==null && f.controls.recipeName.errors.required && clickedSubmit" class="alert alert-danger" role="alert">
+        Recipe name is required
+    <br>
+    </div>
+    
+    <div><label for="prepTime"><h5>Preparation Time</h5></label></div>
+    <div class="input-group mb-3">
+        <input type="number" id="prepTime" name="prepTime" class="form-control" placeholder="Enter the preparation time" aria-label="Preparation time" aria-describedby="basic-addon2" formControlName="prepTime">
+        <div class="input-group-addon">
+            <span class="input-group-text" id="basic-addon2">minutes</span>
+        </div>
+    </div>
+    <br>
+
+    <div><label for="cookTime"><h5>Cooking Time</h5></label></div>
+    <div class="input-group mb-3">
+        <input type="number" id="cookTime" name="cookTime" class="form-control" placeholder="Enter the cooking time" aria-label="Cooking time" aria-describedby="basic-addon2" formControlName="cookTime">
+        <div class="input-group-addon">
+            <span class="input-group-text" id="basic-addon2">minutes</span>
+        </div>
+    </div>
+
+    <br>
+    <div class="form-group">
+        <label for="description"><h5>Description</h5></label>
+        <textarea class="form-control" id="description" rows="3" placeholder="Enter the description" formControlName="description"></textarea>
+    </div>
+    <br>
+
+    <div class="form-label-group">
+        <label for="serving"><h5>Serving Size*</h5></label>
+        <input type="number" id="serving" name="serving" class="form-control" placeholder="Enter the serving size" formControlName="serving">
+    </div>
+    <br>
+    <div *ngIf="f.controls.serving.errors!==null && f.controls.serving.errors.required && clickedSubmit" class="alert alert-danger" role="alert">
+        Serving size is required
+    </div>
+    <br>
+    <div *ngIf="f.controls.serving.errors!==null && f.controls.serving.errors.pattern && clickedSubmit" class="alert alert-danger" role="alert">
+        Serving size must be a whole number
+    <br>
+    </div>
+
+    <!-- has an add button to add more input fields if needed -->
+    <div class="form-label-group">
+        <label><h5>Categories</h5></label>
+        <p><i>Add as many categories as you like! This are keywords used for searching, e.g:</i></p>
+        <ul>
+            <li><i>Breakfast</i></li>
+            <li><i>Seafood</i></li>
+            <li><i>Western</i></li>
+            <li><i>Easy</i></li>
+            <li><i>Pan Fry</i></li>
+            <li><i>Pastry</i></li>
+            <li><i>Dessert</i></li>
+            <li><i>Drink</i></li>
+            <li><i>Meat</i></li>
+            <li><i>Vegetarian</i></li>
+            <li><i>Halal</i></li>
+            <li><i>etc</i></li>            
+        </ul>
+        <p><i>The more categories you enter, the easier it is to find!</i></p>
+        <table *ngIf="categoryArr.length>0" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Category</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody formArrayName="categoryArr">
+    
+                <tr *ngFor="let cat of categoryArr.controls; let i=index;" [formGroupName]="i">
+                    <td>
+                        <input type="text" id="category" name="category" class="form-control" placeholder="Enter the category" formControlName="category">
+                        <div>
+                            <br>
+                            <div *ngIf="categoryArr.length>0 && cat.invalid && clickedSubmit" class="alert alert-danger" role="alert">
+                                Category is required
+                            </div>
+                        </div>
+                    </td>
+                    <td><button type = "button" class="btn btn-danger" (click)="deleteCategory(i)">X</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <button type="button" class="btn btn-success btn-sm"(click)="addCategory()">Add Category</button>
+    <br><br>
+    <br>
+
+
+    <!-- has an add button to add more input fields if needed -->
+    <label><h5>Ingredients*</h5></label>
+    <p><i>Fill in the ingredients for amount, unit and name. E.g:</i></p>
+    <ul>
+        <li><i>Amount can hold values like: 6, 1/4, pinch</i></li>
+        <li><i>Unit can hold values like: tablespoon, teaspoon, cup, ml, g, blank</i></li>
+        <li><i>Name can hold values like: butter, salt, flour, egg yolk, chicken thigh</i></li>
+    </ul>
+
+    <table *ngIf="ingredientsArr.length>0" class="table">
+        <thead>
+            <tr>
+                <th scope="col">Amount</th>
+                <th scope="col">Unit</th>
+                <th scope="col">Name</th>
+                <th scope="col">Delete</th>
+            </tr>
+        </thead>
+        <tbody formArrayName="ingredientsArr">
+
+            <tr *ngFor="let ingredient of ingredientsArr.controls; let i=index;" [formGroupName]="i">
+                <td>
+                    <input type="text" class="form-control" placeholder = "" formControlName="amount">
+                </td>
+                <td><input type="text" class="form-control" placeholder = "" formControlName="unit"></td>
+                <td><input type="text" class="form-control" placeholder = "" formControlName="name"></td>
+                <td><button type = "button" class="btn btn-danger" (click)="deleteIngredient(i)">X</button></td>
+                <div *ngIf="ingredientsArr.length>0 && ingredient.invalid && clickedSubmit" class="alert alert-danger" role="alert">
+                    Amount and name are required. Amount cannot contain a slash (no fractions allowed).
+                </div>
+            </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-success btn-sm"(click)="addIngredient()">Add Ingredient</button>
+    <br><br><br>
+    <div *ngIf="f.controls.ingredientsArr.length<=0 && f.controls.ingredientsArr.status=='INVALID' && clickedSubmit" class="alert alert-danger" role="alert">
+            Ingredients are required
+        <br>
+    </div>
+
+    <!-- has an add button to add more input fields if needed -->
+    <div class="form-label-group">
+        <label><h5>Instructions*</h5></label>
+        <p><i>Add as many instructions as you like!</i></p>
+        <table *ngIf="instructArr.length>0" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Step</th>
+                    <th scope="col">Instructions</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody formArrayName="instructArr">
+    
+                <tr *ngFor="let ins of instructArr.controls; let i=index;" [formGroupName]="i">
+                    <th scope="row">{{i+1}}</th>
+                    <td>
+                        <textarea class="form-control" id="instructions" rows="2" placeholder="Enter the instructions" formControlName="instructions"></textarea>
+                    <div>
+                        <br>
+                        <div *ngIf="instructArr.length>0 && ins.invalid && clickedSubmit" class="alert alert-danger" role="alert">
+                            Instruction is required
+                        </div>
+                    </div>
+                    </td>
+                    <td><button type = "button" class="btn btn-danger" (click)="deleteInstruction(i)">X</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="instructArr.length<=0 && f.controls.instructArr.status=='INVALID' && clickedSubmit" class="alert alert-danger" role="alert">
+            Instructions are required
+        <br>
+    </div>
+    <button type="button" class="btn btn-success btn-sm"(click)="addInstruction()">Add Instruction</button>
+    <br><br><br>
+</form>
+
+<form #uploadForm="ngForm" (ngSubmit)="upload(uploadForm)" class="form-nice">
+
+    <label for="myImage"><h5>Image file*</h5></label>
+    <br>
+    <input type="file" class="form-control" name="myImage" id="myImage" ngModel #imageFile accept="image/*" required>
+    <br>
+    <div *ngIf="uploadForm.invalid && clickedSubmit" class="alert alert-danger" role="alert">
+        Recipe image is required
+    <br>
+    </div>
+    <button mat-raised-button color="primary" class="btn btn-lg btn-primary btn-block" type="submit">Upload</button>
+</form>
+
+</div>
+
+
